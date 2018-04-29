@@ -1,0 +1,23 @@
+# Variables:
+#  - & for color coding
+#  - {line} for a new line
+
+# Options: book or message
+rules-type: book
+
+# Book Config Options
+rules-title: "Title"
+rules-page1: "page 1"
+rules-page2: "page 2"
+rules-page3: "page 3"
+rules-page4: "page 4"
+rules-page5: "page 5"
+rules-author: "Author"
+book-give-success-message: "Book has been given"
+
+# Message Config Options
+message-1: "Message 1"
+message-2: "Message 2"
+message-3: "Message 3"
+message-4: "message 4"
+message-5: "Message 5"
