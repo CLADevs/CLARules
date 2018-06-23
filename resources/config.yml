@@ -3,21 +3,29 @@
 #  - {line} for a new line
 
 # Options: book or message
-rules-type: book
+rules-type: "book"
+
+# Rules not found message
+rules-not-found: "Rules not found."
 
 # Book Config Options
 rules-title: "Title"
-rules-page1: "page 1"
-rules-page2: "page 2"
-rules-page3: "page 3"
-rules-page4: "page 4"
-rules-page5: "page 5"
+rules-pages:
+  - "Page 1"
+  - "Page 2"
+  - "Page 3"
+  - "Page 4"
+  - "Page 5"
+  - "Page 6"
 rules-author: "Author"
-book-give-success-message: "Book has been given"
+book-give-success-message: "Book has been given."
+your-inventory-full: "Your inventory is full."
 
 # Message Config Options
-message-1: "Message 1"
-message-2: "Message 2"
-message-3: "Message 3"
-message-4: "message 4"
-message-5: "Message 5"
+messages:
+  - "Message 1"
+  - "Message 2"
+  - "Message 3"
+  - "message 4"
+  - "Message 5"
+  - "Message 6"

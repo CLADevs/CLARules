@@ -32,7 +32,7 @@ use pocketmine\utils\TextFormat;
 
 class Main extends PluginBase{
 
-    private const VERSION = "v1.0.1";
+    private const VERSION = "v1.0.2";
     private const PREFIX = TextFormat::GREEN . "CLARules" . TextFormat::GOLD . " > ";
 
     public function onEnable() : void{
@@ -52,10 +52,13 @@ class Main extends PluginBase{
                 return false;
             }
             if($this->getConfig()->get("rules-type") === "book"){
-                $this->bookRules($sender);
+                if($sender->getInventory()->canAddItem(Item::get(Item::WRITTEN_BOOK, 0, 1))){
+                    count($this->getConfig()->get("rules-pages")) > 0 ? $this->bookRules($sender) : $sender->sendMessage(TextFormat::RED . str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-not-found")));
+                }else{
+                    $sender->sendMessage(TextFormat::RED . str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("your-inventory-full")));
+                }
             }elseif($this->getConfig()->get("rules-type") === "message"){
-                $this->messageRules($sender);
-                return false;
+                count($this->getConfig()->get("messages")) > 0 ? $this->messageRules($sender) : $sender->sendMessage(TextFormat::RED . str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-not-found")));
             }
         }
         return true;
@@ -65,25 +68,18 @@ class Main extends PluginBase{
         /** @var WrittenBook $book */
         $book = Item::get(Item::WRITTEN_BOOK, 0, 1);
         $book->setTitle(str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-title")));
-        $book->setPageText(0, str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-page1")));
-        $book->setPageText(1, str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-page2")));
-        $book->setPageText(2, str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-page3")));
-        $book->setPageText(3, str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-page4")));
-        $book->setPageText(4, str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-page5")));
         $book->setAuthor(str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("rules-author")));
+
+        $rules = $this->getConfig()->get("rules-pages");
+        for($i = 0; $i < count($rules); $i++){
+            $book->setPageText($i, str_replace(["&", "{line}"], ["§", "\n"], $rules[$i]));
+        }
+        
         $player->getInventory()->addItem($book);
-        $player->sendMessage(str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("book-give-success-message")));
+        $player->sendMessage(TextFormat::GREEN . str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("book-give-success-message")));
     }
 
     private function messageRules(Player $player) : void{
-        /** @var array $messages */
-        $messages = [
-            str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("message-1")),
-            str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("message-2")),
-            str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("message-3")),
-            str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("message-4")),
-            str_replace(["&", "{line}"], ["§", "\n"], $this->getConfig()->get("message-5"))
-        ];
-        foreach($messages as $message) $player->sendMessage($message);
+        foreach($this->getConfig()->get("messages") as $message) $player->sendMessage(str_replace(["&", "{line}"], ["§", "\n"], $message));
     }
 }
